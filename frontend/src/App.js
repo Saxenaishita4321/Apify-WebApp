@@ -18,7 +18,6 @@ function App() {
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-
   const handleApiKeySubmit = async (key) => {
     setLoading(true);
     setError('');
