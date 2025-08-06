@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 require('dotenv').config();
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -9,6 +10,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // Apify API Base URL
 const APIFY_API_BASE = 'https://api.apify.com/v2';
@@ -52,6 +54,9 @@ const makeApifyRequest = async (endpoint, apiKey, method = 'GET', data = null) =
     };
   }
 };
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+});
 
 // Route to verify API key and get user info
 app.post('/api/verify-key', async (req, res) => {
