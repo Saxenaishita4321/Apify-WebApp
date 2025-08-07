@@ -53,6 +53,33 @@ const makeApifyRequest = async (endpoint, method = 'GET', data = null) => {
     };
   }
 };
+ 
+app.get("/", (req, res) => {
+  res.send("Apify Web App Backend is running");
+});
+
+
+app.post("/api", async (req, res) => {
+  const apiKey = req.body.apiKey;
+
+  if (!apiKey) {
+    return res.status(400).json({ error: "API key is required" });
+  }
+
+  try {
+    const response = await axios.get("https://api.apify.com/v2/actor-types", {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("API error:", error.message);
+    res.status(500).json({ error: "Failed to fetch data from Apify API" });
+  }
+}); 
+
 
 // Route to verify API key and get user info
 app.post('/api/verify-key', async (req, res) => {
