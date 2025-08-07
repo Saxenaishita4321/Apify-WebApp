@@ -13,8 +13,9 @@ app.use(express.json());
 // Apify API Base URL
 const APIFY_API_BASE = 'https://api.apify.com/v2';
 
-// Helper function to make authenticated requests to Apify API
-const makeApifyRequest = async (endpoint, apiKey, method = 'GET', data = null) => {
+// Helper function to make authenticated requests to Apify API  apiKey,
+const makeApifyRequest = async (endpoint, method = 'GET', data = null) => {
+     const apiKey = process.env.APIFY_API_KEY;
   try {
     const config = {
       method,
