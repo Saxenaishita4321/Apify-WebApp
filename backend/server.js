@@ -7,7 +7,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*', // for development; restrict to your frontend URL in production
+  methods: ['POST', 'GET'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Apify API Base URL
@@ -84,7 +88,7 @@ app.post("/api", async (req, res) => {
 // Route to verify API key and get user info
 app.post('/api/verify-key', async (req, res) => {
   try {
-    const { apiKey } = req.body;
+    const { apiKey } = req.body.apikey;
     
     if (!apiKey) {
       return res.status(400).json({ error: 'API key is required' });
@@ -109,7 +113,7 @@ app.post('/api/verify-key', async (req, res) => {
 // Route to get user's actors
 app.post('/api/actors', async (req, res) => {
   try {
-    const { apiKey } = req.body;
+    const { apiKey } = req.body.apikey;
     
     if (!apiKey) {
       return res.status(400).json({ error: 'API key is required' });
@@ -328,7 +332,7 @@ app.post('/api/actors/:actorId/run', async (req, res) => {
 // Route to run a generic HTTP request actor with dynamic input schema
 app.post('/api/run-generic-actor', async (req, res) => {
   try {
-    const { apiKey, url, method = 'GET', body, contentType } = req.body;
+    const { apiKey, url, method = 'GET', body, contentType } = req.body.apiKey;
 
     if (!apiKey) {
       return res.status(400).json({ error: 'API key is required' });
@@ -419,7 +423,7 @@ app.post('/api/run-generic-actor', async (req, res) => {
 app.post('/api/debug/actor/:actorId', async (req, res) => {
   try {
     const { actorId } = req.params;
-    const { apiKey } = req.body;
+    const { apiKey } = req.body.apikey;
     
     if (!apiKey) {
       return res.status(400).json({ error: 'API key is required' });
@@ -448,7 +452,7 @@ app.get('/api/health', (req, res) => {
 // Test endpoint for URL validation
 app.post('/api/test-url', async (req, res) => {
   try {
-    const { url } = req.body;
+    const { url } = req.body.apiKey;
     
     if (!url) {
       return res.status(400).json({ error: 'URL is required' });
